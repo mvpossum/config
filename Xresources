@@ -1,0 +1,53 @@
+XTerm*faceName: Monospace
+xterm*faceSize: 12
+xterm*vt100*geometry: 80x60
+xterm*saveLines: 16384
+xterm*loginShell: true
+xterm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+xterm*termName: xterm-color
+xterm*eightBitInput: false
+
+*background:    #000000
+*foreground:    #FFFFFF
+
+#define COLOUR_THEME_FG             #D6D8D9
+#define COLOUR_THEME_BG             #1C1C20
+
+#define COLOUR_THEME_BLACK          COLOUR_THEME_BG
+#define COLOUR_THEME_DARK_RED       #CE5C00
+#define COLOUR_THEME_DARK_GREEN     #B7CE42
+#define COLOUR_THEME_DARK_YELLOW    #B88B10
+#define COLOUR_THEME_DARK_BLUE      #66AABB
+#define COLOUR_THEME_DARK_MAGENTA   #B7416E
+#define COLOUR_THEME_DARK_CYAN      #5E7175
+#define COLOUR_THEME_LIGHT_GREY     COLOUR_THEME_FG
+
+#define COLOUR_THEME_DARK_GREY      #4d4d4d
+#define COLOUR_THEME_LIGHT_RED      #F57900
+#define COLOUR_THEME_LIGHT_GREEN    #BDE077
+#define COLOUR_THEME_LIGHT_YELLOW   #FFC135
+#define COLOUR_THEME_LIGHT_BLUE     #AACCBB
+#define COLOUR_THEME_LIGHT_MAGENTA  #BB4466
+#define COLOUR_THEME_LIGHT_CYAN     #A3BABF
+#define COLOUR_THEME_WHITE          #6C887A
+
+*color0: #050505
+*color1: #e9897c
+*color2: #b6377d
+*color3: #ecebbe
+*color4: #a9cdeb
+*color5: #75507b
+*color6: #c9caec
+*color7: #f2f2f2
+*color8: #141414
+*color9: #f99286
+*color10: #c3f786
+*color11: #fcfbcc
+*color12: #b6defb
+*color13: #ad7fa8
+*color14: #d7d9fc
+*color15: #e2e2e2
+
+xterm*VT100*Translations: #override \
+                 Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\
+                 Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)
