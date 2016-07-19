@@ -7,6 +7,7 @@ cp xinitrc ~/.xinitrc
 cp Xresources ~/.Xresources
 cp zpreztorc ~/.zpreztorc
 cp zshrc ~/.zshrc
+cp zprofile ~/.zprofile
 cp rc.lua ~/.config/awesome
 
 
