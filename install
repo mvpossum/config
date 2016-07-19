@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+cp vimrc ~/.vimrc
+cp Xdefaults ~/.Xdefaults
+cp xinitrc ~/.xinitrc
+cp Xresources ~/.Xresources
+cp zpreztorc ~/.zpreztorc
+cp zshrc ~/.zshrc
+cp rc.lua ~/.config/awesome
+
+
