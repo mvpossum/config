@@ -4,12 +4,12 @@ local awful = require("awful")
 require("eminent")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
---xdg_menu = require("archmenu")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
+local naughty = require("naughty")
 local menubar = require("menubar")
 
 -- {{{ Error handling
@@ -246,6 +246,13 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
 
+    awful.key({ modkey }, "x",
+              function ()
+                  awful.prompt.run({ prompt = "Run: " },
+                  mypromptbox[mouse.screen].widget,
+                  awful.util.spawn, nil,
+                  awful.util.getdir("cache") .. "/history_spawn")
+              end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
 
@@ -260,11 +267,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "c", function () run_or_raise("chromium", { class = "chromium" }) end),
     awful.key({ modkey, }, "s", function () run_or_raise("spacefm", { class = "Spacefm" }) end),
     awful.key({ modkey, }, "x", function () run_or_raise("xterm", { class = "XTerm" }) end)
-
-
-
-
-
 )
 
 
@@ -328,8 +330,6 @@ for i = 1, 9 do
                       end
                   end))
 end
-        --,
-        --awful.key({ modkey, "Shift"}, "g", function () run_or_raise("geany", { class = "geany" }) end))
 
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
@@ -341,57 +341,23 @@ root.keys(globalkeys)
 -- }}}
 
 -- {{{ Rules
-
-if screen.count()==1 then
-    awful.rules.rules = {
-        -- All clients will match this rule.
-        { rule = { },
-          properties = { border_width = beautiful.border_width,
-                         border_color = beautiful.border_normal,
-                         focus = awful.client.focus.filter,
-                         keys = clientkeys,
-                         buttons = clientbuttons } },
-        { rule = { class = "MPlayer" },
-          properties = { floating = true } },
-        { rule = { class = "pinentry" },
-          properties = { floating = true } },
-        { rule = { class = "Gimp" },
-          properties = { floating = true } },
-        { rule = { instance = "plugin-container" },
-            properties = { floating = true } },
-        { rule = { instance = "exe" },
-            properties = { floating = true } },
-        { rule = { class = "chromium" }, properties = { tag = tags[1][1] } },
-        { rule = { class = "spacefm" }, properties = { tag = tags[1][2] } },
-        { rule = { class = "Geany" }, properties = { tag = tags[1][3] } }
-    }
-else
-    awful.rules.rules = {
-        -- All clients will match this rule.
-        { rule = { },
-          properties = { border_width = beautiful.border_width,
-                         border_color = beautiful.border_normal,
-                         focus = awful.client.focus.filter,
-                         keys = clientkeys,
-                         buttons = clientbuttons } },
-        { rule = { class = "MPlayer" },
-          properties = { floating = true } },
-        { rule = { class = "pinentry" },
-          properties = { floating = true } },
-        { rule = { class = "Gimp" },
-          properties = { floating = true } },
-        { rule = { instance = "plugin-container" },
-            properties = { floating = true } },
-        { rule = { instance = "exe" },
-            properties = { floating = true } },
-        { rule = { class = "spacefm" }, properties = { tag = tags[1][2] } },
-        { rule = { class = "chromium" }, properties = { tag = tags[1][1] } },
-        { rule = { class = "XTerm" }, properties = { tag = tags[2][1] } },
-        { rule = { class = "NetBeans IDE 8.1" }, properties = { tag = tags[1][3] } },
-        { rule = { class = "Geany" }, properties = { tag = tags[1][3] } }
-    }
-end
-
+awful.rules.rules = {
+    -- All clients will match this rule.
+    { rule = { },
+      properties = { border_width = beautiful.border_width,
+                     border_color = beautiful.border_normal,
+                     focus = awful.client.focus.filter,
+                     keys = clientkeys,
+                     buttons = clientbuttons } },
+    { rule = { class = "MPlayer" },
+      properties = { floating = true } },
+    { rule = { class = "pinentry" },
+      properties = { floating = true } },
+    { rule = { class = "Gimp" },
+      properties = { floating = true } },
+	{ rule = { instance = "exe" },
+ 	properties = { floating = true } }
+}
 -- }}}
 
 -- {{{ Signals
@@ -520,40 +486,71 @@ function match (table1, table2)
    return true
 end
 
-
 --USERDEF
+function getHostname()
+    local f = io.popen ("/bin/hostname")
+    local hostname = f:read("*a") or ""
+    f:close()
+    hostname = string.gsub(hostname, "\n$", "")
+    return hostname
+end
+local hostname = getHostname()
+
 -- YouTube: fullscreen appears in background, added in rules
 -- https://wiki.archlinux.org/index.php/Awesome#YouTube:_fullscreen_appears_in_background
+table.insert(awful.rules.rules, { rule = { instance = "plugin-container" },
+            properties = { floating = true } })
 
---USERDEF
---Startup
+-- {{{ Rules
+if screen.count() == 1 then
+    awful.rules.rules = awful.util.table.join(awful.rules.rules, {
+        { rule = { class = "chromium" }, properties = { tag = tags[1][1] } },
+        { rule = { class = "Spacefm" }, properties = { tag = tags[1][2] } },
+        { rule = { class = "Geany" }, properties = { tag = tags[1][3] } }
+    })
+else
+    awful.rules.rules = awful.util.table.join(awful.rules.rules, {
+        { rule = { class = "chromium" }, properties = { tag = tags[1][1] } },
+        { rule = { class = "Spacefm" }, properties = { tag = tags[1][2] } },
+        { rule = { class = "Geany" }, properties = { tag = tags[1][3] } },
+        { rule = { class = "XTerm" }, properties = { tag = tags[2][1] } },
+        { rule = { class = "NetBeans IDE 8.1" }, properties = { tag = tags[1][3] } },
+    })
+end
+-- }}}
+
+-- {{{ Startup
 do
     local cmds
-    if screen.count()==2 then
-      cmds = 
-      {
-        "chromium https://www.facebook.com/groups/497413743627889/",
-        "setxkbmap us -variant intl",
-        "nm-applet",
-        "spacefm",
-        "xterm",
-        "owncloud",
-        "skype"
+    if hostname == 'pcnew' then
+        cmds = 
+      { 
+	    "guake",
+	    "setxkbmap us intl",
       }
-    else
-      cmds = 
-      {
-        "setxkbmap us -variant intl",
-        "cbatticon",
-        "nm-applet"
-      }
-
+    elseif hostname ~= 'pcnew' then
+        if screen.count()==2 then
+          cmds = 
+          {
+            "chromium https://www.facebook.com/groups/497413743627889/",
+            "setxkbmap us intl",
+            "nm-applet",
+            "spacefm",
+            "xterm",
+            "owncloud",
+            "skype"
+          }
+        else
+          cmds = 
+          {
+            "setxkbmap us intl",
+            "cbatticon",
+            "nm-applet"
+          }
+        end
     end
   for _,i in pairs(cmds) do
     awful.util.spawn(i)
   end
 end
-
---USERDEF
---Keybindings:
-
+-- }}}
