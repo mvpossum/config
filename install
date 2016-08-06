@@ -4,6 +4,7 @@
 cp vimrc ~/.vimrc
 cp Xdefaults ~/.Xdefaults
 cp xinitrc ~/.xinitrc
+cp xprofile ~/.xprofile
 cp Xresources ~/.Xresources
 cp zpreztorc ~/.zpreztorc
 cp zshrc ~/.zshrc
