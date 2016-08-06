@@ -72,5 +72,5 @@ if [[ ! -d "$TMPDIR" ]]; then
 fi
 
 TMPPREFIX="${TMPDIR%/}/zsh"
-
+xss-lock -- slock &
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
